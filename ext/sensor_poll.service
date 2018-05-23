@@ -1,0 +1,14 @@
+[Unit]
+Description=Temp Sensor Polling
+After=network.target
+
+[Service]
+Type=simple
+ExecStart= /usr/local/bin/sensor_poll
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=sensor_poll
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

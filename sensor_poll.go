@@ -1,54 +1,57 @@
 package main
 
-import "github.com/morus12/dht22"
-import "fmt"
-import "os"
-import "time"
-import "log"
+import (
+	"fmt"
+	"github.com/morus12/dht22"
+	"log"
+	"os"
+	"time"
+)
 
-// TODO CLI flags
-// check data type
 // grab humidity as well
-// display in F and C
-// timestamp it
-// Handle errors
-// Daemonize or make a loop
 
 func CtoF(t float32) float32 {
 	return (t*9/5 + 32)
 }
 
 func check_temp() {
-	PIN := ""
-	if value, ok := os.LookupEnv("PIN"); ok {
-		PIN = "GPIO_" + value
+	GPIO_PIN := ""
+	if value, ok := os.LookupEnv("GPIO_PIN"); ok {
+		GPIO_PIN = "GPIO_" + value
 	} else {
-		PIN = "GPIO_4"
+		GPIO_PIN = "GPIO_4"
 	}
 
-	sensor := dht22.New(PIN)
+	sensor := dht22.New(GPIO_PIN)
 	c1 := make(chan float32, 1)
 	go func() {
 		temperature, err := sensor.Temperature()
 		if err != nil {
-			fmt.Fprintln(os.Stderr, "err is not nil")
-			log.Fatal(err)
+			log.SetOutput(os.Stderr)
+			log.Println(err)
+			return
 		}
 		c1 <- temperature
 	}()
 
+	log.SetOutput(os.Stdout)
 	select {
 	case res := <-c1:
-		fmt.Print(res)
-		fmt.Println(" C")
+		ctempstr := fmt.Sprintf("%.1f", res)
+		log.Print(ctempstr + " C")
 		resf := CtoF(res)
-		fmt.Print(resf)
-		fmt.Println(" F")
+		ftempstr := fmt.Sprintf("%.1f", resf)
+		log.Print(ftempstr + " F")
 	case <-time.After(2 * time.Second):
-		fmt.Println("Operation timed out")
+		log.SetOutput(os.Stderr)
+		log.Println("error - operation timed out")
+
 	}
 }
 
 func main() {
-	check_temp()
+	for true {
+		check_temp()
+		time.Sleep(5 * time.Second)
+	}
 }
