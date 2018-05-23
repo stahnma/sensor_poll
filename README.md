@@ -16,7 +16,7 @@ build the program
     $ make deps
     $ make
 
-From there, you can run ./sensor_poll.
+From there, you can run `./sensor_poll`.
 
 Currently, valid data is output on stdout. Errors and exceptions (of which
 there appear to be several) are logged on stderr.
@@ -25,7 +25,7 @@ there appear to be several) are logged on stderr.
 # Installation
 
 If you want to install it, the program sensor_poll will be placed in
-/usr/local/bin. A systemd unit will be placed in `/etc/systemd/system`. You can
+`/usr/local/bin`. A systemd unit will be placed in `/etc/systemd/system`. You can
 then use standard systemd interactions for start/stop/journal query etc.
 
 # GPIO PIN
