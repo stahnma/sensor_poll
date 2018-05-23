@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+//TODO
 // grab humidity as well
 
 func CtoF(t float32) float32 {
@@ -45,13 +46,12 @@ func check_temp() {
 	case <-time.After(2 * time.Second):
 		log.SetOutput(os.Stderr)
 		log.Println("error - operation timed out")
-
 	}
 }
 
 func main() {
 	for true {
 		check_temp()
-		time.Sleep(5 * time.Second)
+		time.Sleep(10 * time.Second)
 	}
 }

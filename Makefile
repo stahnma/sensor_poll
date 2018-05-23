@@ -14,7 +14,7 @@ install:
 	install -m0644 ext/sensor_poll.service $(DESTDIR)/etc/systemd/system/sensor_poll.service
 	systemctl daemon-reload
 	systemctl enable sensor_poll
-	systemctl start sensor_poll
+	systemctl restart sensor_poll
 
 deps:
 	go get github.com/morus12/dht22
